@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProjectApp</title>
+<!-- The app's web address. If you ever make a NEW deployment (not a new version of the same one), change it here. -->
+<script>window.APP_URL="https://script.google.com/macros/s/AKfycbyCr2uO6hix7rvBEXQeX_y-bZTNKJX89z0VbtqDwzmmrHdP-QpMtqJuQuipQpNqkoBB/exec";</script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="ProjectApp">
+<meta name="theme-color" content="#FAF6EE">
+<style>
+ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#F7F5F0;color:#26251E}
+ .wrap{max-width:460px;margin:0 auto;padding:28px 20px 40px;text-align:center}
+ img.icon{width:96px;height:96px;border-radius:22px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+ h1{font-size:22px;margin:16px 0 4px}
+ p{line-height:1.45;color:#55534B}
+ .go{display:inline-block;margin:14px 0 22px;background:#C15F3C;color:#fff;text-decoration:none;font-weight:600;padding:13px 26px;border-radius:12px;font-size:16px}
+ .card{background:#fff;border:1px solid #E6E1D4;border-radius:14px;padding:14px 16px;text-align:left;margin:12px 0}
+ .card b{display:block;margin-bottom:6px}
+ ol{margin:0;padding-left:20px;line-height:1.5}
+ .hide{display:none}
+ .small{font-size:13px;color:#7B786E}
+ /* the app, full screen, inside this page: no Google banner */
+ html.embed,html.embed body{height:100%;overflow:hidden;background:#FAF9F5}
+ #appf{position:fixed;inset:0;width:100%;height:100%;border:0;display:none}
+ html.embed #appf{display:block}html.embed #setup{display:none}
+ #wait{position:fixed;inset:0;display:none;place-items:center;text-align:center;color:#7B786E;font-size:14px;background:#FAF9F5}
+ html.embed #wait{display:grid}html.ready #wait{display:none}
+</style>
+</head>
+<body>
+<div class="wrap" id="setup">
+  <img class="icon" src="apple-touch-icon.png" alt="">
+  <h1>Milner ProjectApp</h1>
+  <p>Put this on your home screen once. After that, tap the icon and it opens straight into the app.</p>
+  <a class="go" id="open" href="#">Open the app</a>
+  <div class="card" id="ios"><b>iPhone (in Edge)</b><ol>
+    <li>Tap the <b style="display:inline">⋯</b> button at the bottom, then <b style="display:inline">Share</b> (or tap the share icon).</li>
+    <li>Scroll down and tap <b style="display:inline">Add to Home Screen</b>.</li>
+    <li>If you see <i>Open as Web App</i>, turn it <b style="display:inline">off</b>, so it opens in Edge.</li>
+    <li>Tap <b style="display:inline">Add</b>.</li></ol></div>
+  <div class="card" id="android"><b>Android (in Edge)</b><ol>
+    <li>Tap the <b style="display:inline">⋯</b> button at the bottom.</li>
+    <li>Tap <b style="display:inline">Add to phone</b> (or <i>Add to Home screen</i>).</li>
+    <li>Tap <b style="display:inline">Add</b>, then <b style="display:inline">Add</b> again if asked.</li></ol></div>
+  <p class="small">The first time you open the app, sign in with the Google account Nolan set you up with.</p>
+</div>
+<iframe id="appf" title="Milner ProjectApp" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
+<div id="wait"><div><img class="icon" src="apple-touch-icon.png" alt="" style="width:64px;height:64px;border-radius:15px"><p>Opening ProjectApp…</p></div></div>
+<script>
+(function(){
+  /* Show the app inside this page, so Google's "created by a Google Apps Script user" banner doesn't appear.
+     The app sends a "ready" message once it has opened and you're signed in. If nothing arrives in time
+     (not signed in yet, or a phone that blocks it, like iPhones often do), open the app directly instead:
+     it works the same, just with the banner. A phone where that happens skips straight to direct for a week. */
+  var direct=function(){location.replace(window.APP_URL)};
+  /* For now phones always open the app directly (banner and all); only laptops and desktops show it inside this page. */
+  var phone=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||"")||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent||""));
+  var go=function(){
+    var no=0;try{no=+localStorage.getItem("pa-embed-no")||0}catch(e){}
+    if(phone||/[?&]direct\b/.test(location.search)||Date.now()-no<7*864e5){direct();return}
+    document.documentElement.className+=" embed";
+    var f=document.getElementById("appf"),done=false;
+    window.addEventListener("message",function(e){var d=e.data;if(d&&d.projectapp==="ready"){done=true;document.documentElement.className+=" ready";try{localStorage.removeItem("pa-embed-no")}catch(x){}}});
+    f.src=window.APP_URL;
+    setTimeout(function(){if(!done){try{localStorage.setItem("pa-embed-no",String(Date.now()))}catch(x){}direct()}},15000)};
+  document.getElementById("open").href=window.APP_URL;
+  var ua=navigator.userAgent||"",ios=/iPhone|iPad|iPod/.test(ua),android=/Android/.test(ua);
+  if(ios)document.getElementById("android").className+=" hide";
+  if(android)document.getElementById("ios").className+=" hide";
+  var fromIcon=/[?&]launch=1/.test(location.search)||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  var setup=/[?&]setup\b/.test(location.search);
+  // tidy the address so the icon saved to the home screen is the plain link, not the ?setup one
+  if(setup&&history.replaceState)history.replaceState(null,"",location.pathname);
+  var seen=false;try{seen=localStorage.getItem("milnerpm-seen")==="1";localStorage.setItem("milnerpm-seen","1")}catch(e){}
+  // From the home-screen icon, or any visit after the first: straight into the app.
+  // First visit, or the ?setup link: show how to add the icon.
+  if(!setup&&(fromIcon||seen||!phone))go();
+})();
+</script>
+</body>
+</html>
