@@ -81,13 +81,17 @@
      If the app doesn't say it's ready in time, open it directly, and skip the frame for a day (?embed tries the frame again right away). */
   var phone=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||"")||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent||""));
   var go=function(){
-    var no=0;try{if(/[?&]embed\b/.test(location.search))localStorage.removeItem("pa-embed-no");no=+localStorage.getItem("pa-embed-no")||0}catch(e){}
-    if(/[?&]direct\b/.test(location.search)||Date.now()-no<864e5){direct();return}
+    /* v3.18.4: a slow or failed launch no longer makes the NEXT launches skip the frame (that is what left Chrome's bars on the app for a day).
+       Any old "skip for a day" note left by an earlier version is cleared. Only ?direct opens Google's page on purpose. */
+    try{localStorage.removeItem("pa-embed-no")}catch(e){}
+    if(/[?&]direct\b/.test(location.search)){direct();return}
     document.documentElement.className+=" embed";
-    var f=document.getElementById("appf"),done=false;
-    window.addEventListener("message",function(e){var d=e.data;if(d&&d.projectapp==="ready"){done=true;document.documentElement.className+=" ready";try{localStorage.removeItem("pa-embed-no")}catch(x){}}});
+    var f=document.getElementById("appf"),done=false,alive=false;
+    /* "alive" = the app's page has started (before it has heard back from the server); "ready" = it has opened. */
+    window.addEventListener("message",function(e){var d=e.data;if(d&&d.projectapp==="alive")alive=true;if(d&&d.projectapp==="ready"){done=true;document.documentElement.className+=" ready"}});
     f.src=appUrl();
-    setTimeout(function(){if(!done){try{localStorage.setItem("pa-embed-no",String(Date.now()))}catch(x){}direct()}},25000)};
+    /* Nothing at all after 25 s: open the app directly for this launch only. If the app has started but the server is slow, wait up to 90 s. */
+    setTimeout(function(){if(done)return;if(!alive){direct();return}setTimeout(function(){if(!done)direct()},65000)},25000)};
   document.getElementById("open").href=appUrl();
   var ua=navigator.userAgent||"",ios=/iPhone|iPad|iPod/.test(ua),android=/Android/.test(ua);
   if(ios)document.getElementById("android").className+=" hide";
