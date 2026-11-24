@@ -37,18 +37,18 @@
   <h1>Milner ProjectApp</h1>
   <p>Put this on your home screen once. After that, tap the icon and it opens straight into the app.</p>
   <a class="go" id="open" href="#">Open the app</a>
-  <div class="card" id="ios"><b>iPhone (Chrome, Safari or Edge)</b><ol>
-    <li>Tap the share icon (in Chrome it's in the address bar; in Edge, tap <b style="display:inline">⋯</b> first).</li>
+  <div class="card" id="ios"><b>iPhone (in Edge)</b><ol>
+    <li>Tap the <b style="display:inline">⋯</b> button at the bottom, then <b style="display:inline">Share</b> (or tap the share icon).</li>
     <li>Scroll down and tap <b style="display:inline">Add to Home Screen</b>.</li>
-    <li>If you see <i>Open as Web App</i>, leave it <b style="display:inline">on</b>.</li>
+    <li>If you see <i>Open as Web App</i>, turn it <b style="display:inline">off</b>, so it opens in Edge.</li>
     <li>Tap <b style="display:inline">Add</b>.</li></ol></div>
-  <div class="card" id="android"><b>Android (Chrome or Edge)</b><ol>
+  <div class="card" id="android"><b>Android (in Edge)</b><ol>
     <li>Tap the <b style="display:inline">⋯</b> button at the bottom.</li>
     <li>Tap <b style="display:inline">Add to phone</b> (or <i>Add to Home screen</i>).</li>
     <li>Tap <b style="display:inline">Add</b>, then <b style="display:inline">Add</b> again if asked.</li></ol></div>
-  <p class="small">The first time you open it from the icon, sign in with your work email and PIN.</p>
+  <p class="small">The first time you open the app, sign in with the Google account Nolan set you up with.</p>
 </div>
-<iframe id="appf" title="Milner ProjectApp" allow="clipboard-read; clipboard-write; fullscreen; geolocation; camera; microphone"></iframe>
+<iframe id="appf" title="Milner ProjectApp" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
 <div id="wait"><div><img class="icon" src="apple-touch-icon.png" alt="" style="width:64px;height:64px;border-radius:15px"><p>Opening ProjectApp…</p></div></div>
 <script>
 (function(){
@@ -56,19 +56,26 @@
      The app sends a "ready" message once it has opened and you're signed in. If nothing arrives in time
      (not signed in yet, or a phone that blocks it, like iPhones often do), open the app directly instead:
      it works the same, just with the banner. A phone where that happens skips straight to direct for a week. */
-  var direct=function(){location.replace(window.APP_URL)};
-  /* Phones show the app inside this page too (since 3.0 there's no Google sign-in to get blocked). Opening the app directly from a
-     home-screen web app sends it to another site, which makes the phone draw browser bars over it, so staying inside this page avoids that. */
+  /* v2.5: carry your email (?e=) through to the app, and keep a copy here, so the sign-in page can fill it in */
+  /* v3.12.1: also kept in a cookie (a second copy if the phone clears one), and when we have no email we send our own address (?ln=)
+     so the app can offer a one-tap "Save to icon" that comes back here with ?e= */
+  var ck=function(){var m=/(?:^|; )paemail=([^;]*)/.exec(document.cookie||"");return m?decodeURIComponent(m[1]):""};
+  var keep=function(v){try{localStorage.setItem("pa-email",v)}catch(e){}try{document.cookie="paemail="+encodeURIComponent(v)+"; max-age=31536000; path=/; secure; samesite=lax"}catch(e){}};
+  var em="";try{var m=/[?&]e=([^&#]+)/.exec(location.search);if(m){em=decodeURIComponent(m[1]);keep(em)}else{em=localStorage.getItem("pa-email")||ck();if(em)keep(em)}}catch(e){em=ck()}
+  var me=location.origin+location.pathname;
+  var appUrl=function(){return window.APP_URL+(em?"?e="+encodeURIComponent(em):"?ln="+encodeURIComponent(me))};
+  var direct=function(){location.replace(appUrl())};
+  /* For now phones always open the app directly (banner and all); only laptops and desktops show it inside this page. */
   var phone=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||"")||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent||""));
   var go=function(){
     var no=0;try{no=+localStorage.getItem("pa-embed-no")||0}catch(e){}
-    if(/[?&]direct\b/.test(location.search)||Date.now()-no<(phone?864e5:7*864e5)){direct();return}
+    if(phone||/[?&]direct\b/.test(location.search)||Date.now()-no<7*864e5){direct();return}
     document.documentElement.className+=" embed";
     var f=document.getElementById("appf"),done=false;
     window.addEventListener("message",function(e){var d=e.data;if(d&&d.projectapp==="ready"){done=true;document.documentElement.className+=" ready";try{localStorage.removeItem("pa-embed-no")}catch(x){}}});
-    f.src=window.APP_URL;
-    setTimeout(function(){if(!done){try{localStorage.setItem("pa-embed-no",String(Date.now()))}catch(x){}direct()}},phone?25000:15000)};
-  document.getElementById("open").href=window.APP_URL;
+    f.src=appUrl();
+    setTimeout(function(){if(!done){try{localStorage.setItem("pa-embed-no",String(Date.now()))}catch(x){}direct()}},15000)};
+  document.getElementById("open").href=appUrl();
   var ua=navigator.userAgent||"",ios=/iPhone|iPad|iPod/.test(ua),android=/Android/.test(ua);
   if(ios)document.getElementById("android").className+=" hide";
   if(android)document.getElementById("ios").className+=" hide";
@@ -79,7 +86,7 @@
   var seen=false;try{seen=localStorage.getItem("milnerpm-seen")==="1";localStorage.setItem("milnerpm-seen","1")}catch(e){}
   // From the home-screen icon, or any visit after the first: straight into the app.
   // First visit, or the ?setup link: show how to add the icon.
-  if(!setup&&(fromIcon||seen||!phone))go();
+  if(!setup&&(fromIcon||seen||!phone||/[?&]e=/.test(location.search)))go();
 })();
 </script>
 </body>
