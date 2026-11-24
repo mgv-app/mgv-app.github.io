@@ -3,7 +3,7 @@
  "short_name": "ProjectApp",
  "start_url": "./?launch=1",
  "scope": "./",
- "display": "browser",
+ "display": "standalone",
  "background_color": "#FAF6EE",
  "theme_color": "#FAF6EE",
  "icons": [
