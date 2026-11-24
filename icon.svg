@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#FAF6EE"/>
 <g transform="translate(256 262) scale(0.9) translate(-268 -272)">
  <!-- arm: straight boom and stick, big round elbow -->
- <g stroke="#C96442" stroke-linecap="round" fill="none">
+ <g stroke="#356A9C" stroke-linecap="round" fill="none">
   <path d="M262 262 L370 150" stroke-width="32"/>
   <path d="M370 150 L428 262" stroke-width="24"/>
  </g>
- <circle cx="370" cy="150" r="27" fill="#C96442" stroke="#FAF6EE" stroke-width="7"/>
+ <circle cx="370" cy="150" r="27" fill="#356A9C" stroke="#FAF6EE" stroke-width="7"/>
  <!-- bucket -->
- <path d="M414 254 L 446 252 Q 462 300, 438 332 Q 418 352, 376 344 L 362 336 L 374 330 L 364 322 L 378 318 Q 400 300, 414 254 Z" fill="#C96442"/>
- <circle cx="428" cy="262" r="14" fill="#C96442" stroke="#FAF6EE" stroke-width="6"/>
+ <path d="M414 254 L 446 252 Q 462 300, 438 332 Q 418 352, 376 344 L 362 336 L 374 330 L 364 322 L 378 318 Q 400 300, 414 254 Z" fill="#356A9C"/>
+ <circle cx="428" cy="262" r="14" fill="#356A9C" stroke="#FAF6EE" stroke-width="6"/>
  <!-- house: engine with exhaust stack, counterweight, cab -->
- <path d="M102 238 L102 200 Q102 194 108 194 L116 194 Q122 194 122 200 L122 238 Z" fill="#C96442"/>
- <path d="M84 326 L84 252 Q84 238 98 238 L182 238 L182 192 Q182 178 196 178 L238 178 Q250 178 255 189 L276 246 Q280 256 280 266 L280 326 Q280 336 270 336 L94 336 Q84 336 84 326 Z" fill="#C96442"/>
+ <path d="M102 238 L102 200 Q102 194 108 194 L116 194 Q122 194 122 200 L122 238 Z" fill="#356A9C"/>
+ <path d="M84 326 L84 252 Q84 238 98 238 L182 238 L182 192 Q182 178 196 178 L238 178 Q250 178 255 189 L276 246 Q280 256 280 266 L280 326 Q280 336 270 336 L94 336 Q84 336 84 326 Z" fill="#356A9C"/>
  <path d="M200 196 L234 196 Q240 196 242 202 L256 240 L200 240 Z" fill="#FAF6EE"/>
  <path d="M84 300 H280" stroke="#FAF6EE" stroke-width="7"/>
  <!-- tracks -->
- <rect x="92" y="352" width="210" height="58" rx="29" fill="none" stroke="#C96442" stroke-width="11"/>
- <rect x="92" y="352" width="210" height="58" rx="29" fill="none" stroke="#C96442" stroke-width="5" stroke-dasharray="2 11" transform="translate(0 0)" opacity="0"/>
- <circle cx="126" cy="381" r="13" fill="none" stroke="#C96442" stroke-width="6"/><circle cx="126" cy="381" r="4.5" fill="#C96442"/><circle cx="174" cy="381" r="13" fill="none" stroke="#C96442" stroke-width="6"/><circle cx="174" cy="381" r="4.5" fill="#C96442"/><circle cx="222" cy="381" r="13" fill="none" stroke="#C96442" stroke-width="6"/><circle cx="222" cy="381" r="4.5" fill="#C96442"/><circle cx="270" cy="381" r="13" fill="none" stroke="#C96442" stroke-width="6"/><circle cx="270" cy="381" r="4.5" fill="#C96442"/>
+ <rect x="92" y="352" width="210" height="58" rx="29" fill="none" stroke="#356A9C" stroke-width="11"/>
+ <rect x="92" y="352" width="210" height="58" rx="29" fill="none" stroke="#356A9C" stroke-width="5" stroke-dasharray="2 11" transform="translate(0 0)" opacity="0"/>
+ <circle cx="126" cy="381" r="13" fill="none" stroke="#356A9C" stroke-width="6"/><circle cx="126" cy="381" r="4.5" fill="#356A9C"/><circle cx="174" cy="381" r="13" fill="none" stroke="#356A9C" stroke-width="6"/><circle cx="174" cy="381" r="4.5" fill="#356A9C"/><circle cx="222" cy="381" r="13" fill="none" stroke="#356A9C" stroke-width="6"/><circle cx="222" cy="381" r="4.5" fill="#356A9C"/><circle cx="270" cy="381" r="13" fill="none" stroke="#356A9C" stroke-width="6"/><circle cx="270" cy="381" r="4.5" fill="#356A9C"/>
 </g></svg>
